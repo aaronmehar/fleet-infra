@@ -1,0 +1,11 @@
+cluster:
+  etcd:
+    advertisedSubnets:
+      - 172.29.232.0/24
+machine:
+  network:
+    interfaces:
+    - interface: enp1s0
+      dhcp: true
+      vip:
+        ip: 172.29.232.40
