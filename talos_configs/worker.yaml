@@ -4,10 +4,10 @@ persist: true
 # Provides machine specific configuration options.
 machine:
     type: worker # Defines the role of the machine within the cluster.
-    token: g4qe55.xzanf5lmf26pngjk # The `token` is used by a machine to join the PKI of the cluster.
+    token: r5dhgg.vopxqctodyo3mfdz # The `token` is used by a machine to join the PKI of the cluster.
     # The root certificate authority of the PKI.
     ca:
-        crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJQekNCOHFBREFnRUNBaEVBdnBSOVFZbzN2b053T2FDelNpdDkzVEFGQmdNclpYQXdFREVPTUF3R0ExVUUKQ2hNRmRHRnNiM013SGhjTk1qVXdOakl4TWpFeE9UQXlXaGNOTXpVd05qRTVNakV4T1RBeVdqQVFNUTR3REFZRApWUVFLRXdWMFlXeHZjekFxTUFVR0F5dGxjQU1oQUJuUmJnbDlKc3BzS0xoRE1zMUlzSE5LLzRnUlk5M1Bka2xTCmZhNmRERkZhbzJFd1h6QU9CZ05WSFE4QkFmOEVCQU1DQW9Rd0hRWURWUjBsQkJZd0ZBWUlLd1lCQlFVSEF3RUcKQ0NzR0FRVUZCd01DTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRk5PZSt5bmhmNzQ4WjlqTQptN20xWkt5NWVsOG9NQVVHQXl0bGNBTkJBQ1JaSFN4UGZNRlE3UVFGUmxlTmV2UVd0a0hLNENRZEVEc2J1c25yCmloT1BQR2hzSlBtYmhGT08rRTJKT1JCR0x1dWlKdHpXOEdkbEZHTzZVNDlxZGdZPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+        crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJQakNCOGFBREFnRUNBaEJYZkg3VE5ZamJsMmNoV0N5MHZoZUFNQVVHQXl0bGNEQVFNUTR3REFZRFZRUUsKRXdWMFlXeHZjekFlRncweU5UQTNNRFV5TVRRek1EaGFGdzB6TlRBM01ETXlNVFF6TURoYU1CQXhEakFNQmdOVgpCQW9UQlhSaGJHOXpNQ293QlFZREsyVndBeUVBUHV4RktLSkFjMFQzRzBYbnNuRHNWM2VFck1sZTAvK3pja0p0CmhRNUtzRldqWVRCZk1BNEdBMVVkRHdFQi93UUVBd0lDaERBZEJnTlZIU1VFRmpBVUJnZ3JCZ0VGQlFjREFRWUkKS3dZQkJRVUhBd0l3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFkQmdOVkhRNEVGZ1FVUUo1LzR1R0w5eUREQ01tVwpWT3FiYkRRcWlTQXdCUVlESzJWd0EwRUFDa3k5Qi9MMUpyc05FbE5KbERSTmE4ZEhzSkNXaWZvUWhweGlOSHFxCnRjRTNYc0h6cjE3cEhtaXJJSlIzU0h3WDdVREcxOHF4Y3hlUmt5SllGZS9hQVE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
         key: ""
     # Extra certificate subject alternative names for the machine's certificate.
     certSANs: []
@@ -185,8 +185,8 @@ machine:
 
     # Used to provide instructions for installations.
     install:
-        disk: /dev/nvme0n1p1 # The disk used for installations.
-        image: ghcr.io/siderolabs/installer:v1.10.4 # Allows for supplying the image used to perform the installation.
+        disk: /dev/nvme0n1 # The disk used for installations.
+        image: factory.talos.dev/metal-installer-secureboot/ede89ce2a46f773b96875ab18e7c9afa3e5bc41cd21ec920e92bf85949a14f69:v1.10.4 # Allows for supplying the image used to perform the installation.
         wipe: false # Indicates if the installation disk should be wiped at installation time.
         
         # # Look up disk using disk attributes like model, size, serial and others.
@@ -226,6 +226,54 @@ machine:
     #         #     username: username # Optional registry authentication.
     #         #     password: password # Optional registry authentication.
 
+    # Machine system disk encryption configuration.
+    systemDiskEncryption:
+        # State partition encryption.
+        state:
+            provider: luks2 # Encryption provider to use for the encryption.
+            # Defines the encryption keys generation and storage method.
+            keys:
+                - slot: 0 # Key slot number for LUKS2 encryption.
+                  # Enable TPM based disk encryption.
+                  tpm: {}
+                  
+                  # # KMS managed encryption key.
+                  # kms:
+                  #     endpoint: https://192.168.88.21:4443 # KMS endpoint to Seal/Unseal the key.
+            
+            # # Cipher kind to use for the encryption. Depends on the encryption provider.
+            # cipher: aes-xts-plain64
+
+            # # Defines the encryption sector size.
+            # blockSize: 4096
+
+            # # Additional --perf parameters for the LUKS2 encryption.
+            # options:
+            #     - no_read_workqueue
+            #     - no_write_workqueue
+        # Ephemeral partition encryption.
+        ephemeral:
+            provider: luks2 # Encryption provider to use for the encryption.
+            # Defines the encryption keys generation and storage method.
+            keys:
+                - slot: 0 # Key slot number for LUKS2 encryption.
+                  # Enable TPM based disk encryption.
+                  tpm: {}
+                  
+                  # # KMS managed encryption key.
+                  # kms:
+                  #     endpoint: https://192.168.88.21:4443 # KMS endpoint to Seal/Unseal the key.
+            
+            # # Cipher kind to use for the encryption. Depends on the encryption provider.
+            # cipher: aes-xts-plain64
+
+            # # Defines the encryption sector size.
+            # blockSize: 4096
+
+            # # Additional --perf parameters for the LUKS2 encryption.
+            # options:
+            #     - no_read_workqueue
+            #     - no_write_workqueue
     # Features describe individual Talos features that can be switched on or off.
     features:
         rbac: true # Enable role-based access control (RBAC).
@@ -321,32 +369,6 @@ machine:
     # sysfs:
     #     devices.system.cpu.cpu0.cpufreq.scaling_governor: performance
 
-    # # Machine system disk encryption configuration.
-    # systemDiskEncryption:
-    #     # Ephemeral partition encryption.
-    #     ephemeral:
-    #         provider: luks2 # Encryption provider to use for the encryption.
-    #         # Defines the encryption keys generation and storage method.
-    #         keys:
-    #             - # Deterministically generated key from the node UUID and PartitionLabel.
-    #               nodeID: {}
-    #               slot: 0 # Key slot number for LUKS2 encryption.
-    #               
-    #               # # KMS managed encryption key.
-    #               # kms:
-    #               #     endpoint: https://192.168.88.21:4443 # KMS endpoint to Seal/Unseal the key.
-    #         
-    #         # # Cipher kind to use for the encryption. Depends on the encryption provider.
-    #         # cipher: aes-xts-plain64
-
-    #         # # Defines the encryption sector size.
-    #         # blockSize: 4096
-
-    #         # # Additional --perf parameters for the LUKS2 encryption.
-    #         # options:
-    #         #     - no_read_workqueue
-    #         #     - no_write_workqueue
-
     # # Configures the udev system.
     # udev:
     #     # List of udev rules to apply to the udev system
@@ -402,8 +424,8 @@ machine:
     #     exampleTaint: exampleTaintValue:NoSchedule
 # Provides cluster specific configuration options.
 cluster:
-    id: cjIeUIBi-56Elli4-xQACAcUGRa6pwzcv8Ka9FHbvQM= # Globally unique identifier for this cluster (base64 encoded random 32 bytes).
-    secret: 5gzYwa/IA57qPGtdn9rwHB51kXXhjXLgeMG1Tuio1GQ= # Shared secret of cluster (base64 encoded random 32 bytes).
+    id: 0TaE6BNuWJ3exex69ZptfHYLEPgxErsg8Yz2xe1hJHo= # Globally unique identifier for this cluster (base64 encoded random 32 bytes).
+    secret: Yxx9sA11QNrprkx+XXPCzTl8oWBGbGuhcGNat0cmFI8= # Shared secret of cluster (base64 encoded random 32 bytes).
     # Provides control plane specific configuration options.
     controlPlane:
         endpoint: https://k8s.prod.mehar.internal:6443 # Endpoint is the canonical controlplane endpoint, which can be an IP address or a DNS hostname.
@@ -423,10 +445,10 @@ cluster:
         # The service subnet CIDR.
         serviceSubnets:
             - 100.80.0.0/15
-    token: svo0qr.x0d8prfkbd3ndsam # The [bootstrap token](https://kubernetes.io/docs/reference/access-authn-authz/bootstrap-tokens/) used to join the cluster.
+    token: 6yye0e.duwlaqb9dp2sr3f1 # The [bootstrap token](https://kubernetes.io/docs/reference/access-authn-authz/bootstrap-tokens/) used to join the cluster.
     # The base64 encoded root certificate authority used by Kubernetes.
     ca:
-        crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJpVENDQVRDZ0F3SUJBZ0lSQUpidWFyNHVLU3dxUGZtbDJzRXQxVDh3Q2dZSUtvWkl6ajBFQXdJd0ZURVQKTUJFR0ExVUVDaE1LYTNWaVpYSnVaWFJsY3pBZUZ3MHlOVEEyTWpFeU1URTVNREphRncwek5UQTJNVGt5TVRFNQpNREphTUJVeEV6QVJCZ05WQkFvVENtdDFZbVZ5Ym1WMFpYTXdXVEFUQmdjcWhrak9QUUlCQmdncWhrak9QUU1CCkJ3TkNBQVJRQ3NONE5aT0s5VURRL1hCcm55RzMwY1ExUmZmdnNVWWp6cTUyUFBjaXNwOThZS3laVjRBTW9nRW4KYUZPU25XL3QwVWZOYks0ci9DMGI0SG51MjdUem8yRXdYekFPQmdOVkhROEJBZjhFQkFNQ0FvUXdIUVlEVlIwbApCQll3RkFZSUt3WUJCUVVIQXdFR0NDc0dBUVVGQndNQ01BOEdBMVVkRXdFQi93UUZNQU1CQWY4d0hRWURWUjBPCkJCWUVGR0lDRmZha3pONjRDQ1FxUHlPU3NmWVpuaEluTUFvR0NDcUdTTTQ5QkFNQ0EwY0FNRVFDSUVrY2QrdEUKNHBFNGgwWXU3YVBhUHEzSTFJZDkwTzhZeUxMakpXamxZTUhrQWlBSDBDTlRLeXpPdEErcWJRWDNWQUFZVkU0SApDcUdyazRncXBlUGxoU1pMRnc9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+        crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJpakNDQVRDZ0F3SUJBZ0lSQU90M0x4ajdHdGNGMklLNktBOEkxS2N3Q2dZSUtvWkl6ajBFQXdJd0ZURVQKTUJFR0ExVUVDaE1LYTNWaVpYSnVaWFJsY3pBZUZ3MHlOVEEzTURVeU1UUXpNRGhhRncwek5UQTNNRE15TVRRegpNRGhhTUJVeEV6QVJCZ05WQkFvVENtdDFZbVZ5Ym1WMFpYTXdXVEFUQmdjcWhrak9QUUlCQmdncWhrak9QUU1CCkJ3TkNBQVRKY3JJWWVaeExqa2pXQXhtaHpOVEZ2L3NrZXJXZW1rU3V1RzhGTDdURGlxditndlZ3bkxmNjhUZW0KZUJ3R0ZrdCthcFFNbTNIU0R5d0RENlpLY2xSM28yRXdYekFPQmdOVkhROEJBZjhFQkFNQ0FvUXdIUVlEVlIwbApCQll3RkFZSUt3WUJCUVVIQXdFR0NDc0dBUVVGQndNQ01BOEdBMVVkRXdFQi93UUZNQU1CQWY4d0hRWURWUjBPCkJCWUVGR2RYZytLaDdJd1AyL0o0Qk80K1RFNHh3ZmpQTUFvR0NDcUdTTTQ5QkFNQ0EwZ0FNRVVDSUFvdGh5VlkKS0RwVzJYUUROQWJqYzdCT2d3WjIxeEZKZWg0cTRkcGZIZUN1QWlFQTBya1hmSXNHeUNZbVdQcU05aDQxY3I4cApQNWtsZXF3di9URzg4Z05zaFFvPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
         key: ""
     # Kube-proxy server-specific configuration options
     proxy:
@@ -595,3 +617,15 @@ cluster:
     # # Settings for admin kubeconfig generation.
     # adminKubeconfig:
     #     certLifetime: 1h0m0s # Admin kubeconfig certificate lifetime (default is 1 year).
+---
+apiVersion: v1alpha1
+kind: ExtensionServiceConfig
+name: lldpd # Name of the extension service.
+# The config files for the extension service.
+configFiles:
+    - content: | # The content of the extension service config file.
+        configure lldp portidsubtype ifname
+        unconfigure lldp management-addresses-advertisements
+        unconfigure lldp capabilities-advertisements
+        configure system description "Talos Node"
+      mountPath: /usr/local/etc/lldpd/lldpd.conf # The mount path of the extension service config file.

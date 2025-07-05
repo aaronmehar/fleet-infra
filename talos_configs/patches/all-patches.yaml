@@ -1,0 +1,32 @@
+machine:
+  install:
+    disk: /dev/nvme0n1
+  kubelet:
+    nodeIP:
+      validSubnets:
+        - 172.29.232.0/24
+  systemDiskEncryption:
+    ephemeral:
+      provider: luks2
+      keys:
+        - slot: 0
+          tpm: {}
+    state:
+      provider: luks2
+      keys:
+        - slot: 0
+          tpm: {}
+cluster:
+  allowSchedulingOnControlPlanes: true
+  network:
+    cni:
+      name: custom
+      urls:
+        - http://172.29.232.2/k8s/prod/cilium.yaml
+    dnsDomain: prod.mehar.internal
+    podSubnets:
+      - 100.96.0.0/11
+    serviceSubnets:
+      - 100.80.0.0/15
+  proxy:
+    disabled: true
