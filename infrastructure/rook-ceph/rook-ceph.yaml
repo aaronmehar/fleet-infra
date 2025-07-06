@@ -18,7 +18,7 @@ spec:
   chart:
     spec:
       chart: rook-ceph
-      version: ">=v1.15.0 <v1.15.999"
+      version: ">=v1.17.0 <v1.17.999"
       sourceRef:
         kind: HelmRepository
         name: rook-release
@@ -28,4 +28,5 @@ spec:
     crds:
       enabled: true
     enableDiscoveryDaemon: true
+
 
