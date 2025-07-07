@@ -18,3 +18,15 @@ Manual install of fluxcd
 FluxCD installs Rook, nginx-ingress, cert-manager
 
 
+brew install flux
+
+make PAT token in Github
+
+flux bootstrap github \
+  --cluster-domain prod.mehar.internal \
+  --token-auth \
+  --owner=aaronmehar \
+  --repository=fleet-infra \
+  --branch=main \
+  --path=clusters/production
+
