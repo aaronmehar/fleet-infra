@@ -34,6 +34,9 @@ spec:
         name: metallb
         namespace: metallb-system
       interval: 10m
+  values:
+    crds:
+      enabled: true
 ---
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
