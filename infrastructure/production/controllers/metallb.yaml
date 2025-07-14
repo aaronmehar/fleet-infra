@@ -34,10 +34,21 @@ spec:
         name: metallb
         namespace: metallb-system
       interval: 10m
-  values:
-    configInline:
-      address-pools:
-      - name: default
-        protocol: layer2
-        addresses:
-        - 172.29.232.60-172.29.232.65
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default-address-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 172.29.232.60-172.29.232.65
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - default-address-pool
