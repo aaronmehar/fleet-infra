@@ -39,3 +39,12 @@ spec:
   values:
     crds:
       enabled: true
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default-address-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 172.29.232.60-172.29.232.65
