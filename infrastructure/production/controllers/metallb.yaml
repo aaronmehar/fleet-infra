@@ -15,46 +15,5 @@ metadata:
   name: metallb
   namespace: metallb-system
 spec:
-  interval: 24h
+  interval: 5m0s
   url: https://metallb.github.io/metallb
-
----
-apiVersion: helm.toolkit.fluxcd.io/v2beta2
-kind: HelmRelease
-metadata:
-  name: metallb
-  namespace: metallb-system
-spec:
-  releaseName: metallb
-  interval: 10m
-  chart:
-    spec:
-      chart: metallb
-      version: '0.15.2'
-      sourceRef:
-        kind: HelmRepository
-        name: metallb
-        namespace: metallb-system
-      interval: 10m
-  values:
-    crds:
-      enabled: true
-
----
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  name: default-address-pool
-  namespace: metallb-system
-spec:
-  addresses:
-    - 172.29.232.60-172.29.232.65
----
-apiVersion: metallb.io/v1beta1
-kind: L2Advertisement
-metadata:
-  name: default
-  namespace: metallb-system
-spec:
-  ipAddressPools:
-    - default-address-pool
