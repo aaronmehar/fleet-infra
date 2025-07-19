@@ -25,6 +25,8 @@ spec:
           name: cloudflare-api-token
           key: apiToken
 
+# kubectl create secret generic -n external-dns cloudflare-api-token --from-literal=apiToken=$TOKEN
+
     affinity:
       nodeAffinity:
           # prefer scheduling on control-plane machines
