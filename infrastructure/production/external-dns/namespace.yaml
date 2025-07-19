@@ -1,8 +1,6 @@
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+---
+apiVersion: v1
+kind: Namespace
 metadata:
   name: external-dns
-  namespace: external-dns
-spec:
-  interval: 160m
-  url: https://kubernetes-sigs.github.io/external-dns/
+
