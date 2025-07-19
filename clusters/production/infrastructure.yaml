@@ -59,9 +59,7 @@ metadata:
   name: external-dns
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: infra-controllers
-  interval: 24h
+  interval: 1m
   path: ./infrastructure/production/external-dns
   prune: true
   sourceRef:
