@@ -12,7 +12,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: awx-operator
-        namespace: flux-system
+        namespace: awx 
       interval: 1h
   install:
     createNamespace: false
