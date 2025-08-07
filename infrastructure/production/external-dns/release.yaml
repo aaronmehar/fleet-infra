@@ -26,7 +26,7 @@ spec:
     fullnameOverride: external-dns
     logLevel: debug
     serviceMonitor:
-      enabled: true
+      enabled: false
     rbac:
       create: true
       additionalPermissions:
