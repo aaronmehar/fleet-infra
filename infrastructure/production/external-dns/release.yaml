@@ -2,17 +2,17 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: external-dns-internal
+  name: external-dns
   namespace: external-dns
 spec:
   interval: 30m
   chart:
     spec:
-      chart: external-dns-internal
+      chart: external-dns
       version: 1.18.0
       sourceRef:
         kind: HelmRepository
-        name: external-dns-internal
+        name: external-dns
         namespace: external-dns
   install:
     remediation:
@@ -23,7 +23,7 @@ spec:
       strategy: rollback
       retries: 3
   values:
-    fullnameOverride: external-dns-internal
+    fullnameOverride: external-dns
     logLevel: debug
     serviceMonitor:
       enabled: true
@@ -73,4 +73,4 @@ spec:
       - name: EXTERNAL_DNS_GATEWAY_LABEL_FILTER
         value: gateway-label==internal-gateway
       - name: EXTERNAL_DNS_LABEL_FILTER
-        value: route-label==external-dns-internal
+        value: route-label==external-dns
