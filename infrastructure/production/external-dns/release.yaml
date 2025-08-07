@@ -27,17 +27,6 @@ spec:
     logLevel: debug
     serviceMonitor:
       enabled: false
-    rbac:
-      create: true
-      additionalPermissions:
-        - apiGroups: ['']
-          resources: ['namespaces']
-          verbs: ['get', 'watch', 'list']
-        - apiGroups: ['gateway.networking.k8s.io']
-          resources: ['gateways', 'httproutes']
-          verbs: ['get', 'watch', 'list']
-    sources:
-      - gateway-httproute
     policy: upsert-only
     provider:
       name: webhook
