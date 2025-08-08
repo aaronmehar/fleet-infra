@@ -2,12 +2,25 @@
 apiVersion: ceph.rook.io/v1
 kind: CephBlockPool
 metadata:
-  name: erasure-coded-pool
+  name: replicated-data-pool
   namespace: rook-ceph
 spec:
-  failureDomain: host
+  failureDomain: osd
+  replicated:
+    size: 3
+    requireSafeReplicaSize: true
+  compressionMode: none
+---
+apiVersion: ceph.rook.io/v1
+kind: CephBlockPool
+metadata:
+  name: ec-data-pool
+  namespace: rook-ceph
+spec:
+  failureDomain: osd
   erasureCoded:
     dataChunks: 4
     codingChunks: 2
     algorithm: jerasure
   compressionMode: none
+
