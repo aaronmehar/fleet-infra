@@ -7,13 +7,11 @@ metadata:
 spec:
   failureDomain: host
   replicated:
-    size: 3  # Store 3 copies across different hosts
+    size: 3  
     requireSafeReplicaSize: true
-  compressionMode: aggressive
+  compressionMode: none
   parameters:
-    compression_algorithm: lz4
-    compression_required_ratio: 0.875  # Only compress if >87.5% reduction
-    pg_num: 32  # Fewer PGs for small pool
-    pgp_num: 32
-  deviceClass: ""  # Leave empty to use all device classes
+    pg_num: "32"
+    pgp_num: "32"
+  deviceClass: ""
   enableRBDStats: true
